@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#mv * /usr/local/bin/
+
+#check linux distribution type
+if [ -f /etc/os-release ]; then
+
+	. /etc/os-release
+	DISTRO=$ID_LIKE
+	
+	case $DISTRO in
+		ubuntu|debian)
+			pack="apt-get"
+			;;
+		fedora|rhel|centOS)
+			pack="yum"
+			;;
+		*)
+			echo "Unsupported linux distro. Check readme files for additionnal info"
+			exit 1
+			;;
+	esac
+else
+	echo "Error: Cannot determine linux distribution"
+	exit 1
+fi
+
+echo "Installing all needed dependencies..."
+$pack install -y gpg
+
+echo "Done"
