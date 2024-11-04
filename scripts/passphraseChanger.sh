@@ -15,7 +15,7 @@ decryptedFile="df"
 newFile=$1
 oldPassphrase=$2
 
-gpg --batch --yes --passphrase "$oldPassphrase" -d -o "decryptedFile" "file"
+gpg --batch --yes --passphrase "$oldPassphrase" -d -o "$decryptedFile" "$file"
 
 if [ $? -ne 0 ]; then
     echo "Decryption failed"
