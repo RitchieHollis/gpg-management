@@ -1,6 +1,9 @@
 #!/bin/bash
 
-#mv * /usr/local/bin/
+if [ "$EUID" -ne 0 ]; then
+    echo "Error: only root can run the script. Type sudo bash $0"
+    exit 1
+fi
 
 #check linux distribution type
 if [ -f /etc/os-release ]; then
@@ -27,5 +30,11 @@ fi
 
 echo "Installing all needed dependencies..."
 $pack install -y gpg
+
+#moving files into bin folder & changing the permissions, then removing the initial folder
+echo "Putting every script in order..."
+mv "$(pwd)"/* /usr/local/bin/ && chmod 111 /usr/local/bin/*
+cd .. && rm -r "$OLDPWD"
+rm -r /usr/local/bin/setup
 
 echo "Done"
