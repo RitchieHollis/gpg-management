@@ -33,7 +33,7 @@ $pack install -y gpg
 
 #moving files into bin folder & changing the permissions, then removing the initial folder
 echo "Putting every script in order..."
-mv "$(pwd)"/* /usr/local/bin/ && chmod 111 /usr/local/bin/*
+chmod 111 "$(pwd)"/* && mv "$(pwd)"/* /usr/local/bin/ 
 cd .. && rm -r "$OLDPWD"
 rm -r /usr/local/bin/setup
 
