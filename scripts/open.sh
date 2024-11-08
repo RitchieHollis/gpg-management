@@ -34,8 +34,12 @@ if [ $? -eq 0 ]; then
         if [ "${confirmation,,}" == 'y' ]; then
                 bash /usr/local/bin/passphraseChanger.sh $file $passphrase
                 exit 1
-        fi
+	else; then
+		shred -u "$temp"
+		echo "Updating the local database..."
+		updatedb
+	fi
+		
 fi
 
-shred -u "$temp"
 echo "File has been re-encrypted successfully"

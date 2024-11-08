@@ -18,6 +18,9 @@ if [ -f /etc/os-release ]; then
 		fedora|rhel|centOS)
 			pack="yum"
 			;;
+		suso)
+			pack="zypper"
+			;;
 		*)
 			echo "Unsupported linux distro. Check readme files for additionnal info"
 			exit 1
