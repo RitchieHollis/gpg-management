@@ -32,9 +32,9 @@ if [ $? -eq 0 ]; then
                 read -p "For extra security, do you want to change the passphrase? (y/n)" confirmation
         done
         if [ "${confirmation,,}" == 'y' ]; then
-                bash /usr/local/bin/passphraseChanger.sh $file $passphrase
+                bash /usr/local/bin/passphraseChanger.sh "$file" "$passphrase"
                 exit 1
-	else; then
+	else
 		shred -u "$temp"
 		echo "Updating the local database..."
 		updatedb

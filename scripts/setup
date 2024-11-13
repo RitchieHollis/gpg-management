@@ -33,6 +33,7 @@ fi
 
 echo "Installing all needed dependencies..."
 $pack install -y gpg
+$pack install -y cron
 
 #moving files into bin folder & changing the permissions, then removing the initial folder
 echo "Putting every script in order..."
@@ -42,14 +43,18 @@ chmod 111 "$(pwd)"/* && mv "$(pwd)"/* /usr/local/bin/
 #creating a separate part of disk for logs
 #disk=$(lsblk -nd -o NAME,TYPE | awk '$2 == "disk" {print $1; exit}')
 
-
+usr=$(whoami)
 
 cd .. && rm -r "$OLDPWD"
-mkdir /home/$USER/Database
+mkdir home/"$usr"/database
 
 #Cron job to checker script
-crontab -e 0 9 * * * /usr/local/bin/checker
+systemctl start cron
+systemctl enable cron
+(crontab -l | grep -Fxq "0 9 * * * sh /usr/local/bin/checker") || (crontab -l; echo "0 9 * * * sh /usr/local/bin/checker") | crontab -
+bash /usr/local/bin/checker
 
-echo "DOne"
+
+echo "Done"
 rm -r /usr/local/bin/setup
 
