@@ -15,3 +15,4 @@ sudo bash setup
   - Ubuntu
   - CentOS
   - Rhel
+  - Suso
