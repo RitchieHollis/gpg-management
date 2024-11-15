@@ -16,8 +16,8 @@ currentDate=$(date +%s)
 #Checking passphrase expiration for each encrypted package 
 for FILE in "$path"; do
 	if [ -f "$FILE.gpg" ]; then
-		lastModifiedDate==$(stat -c %Y "$FILE")
-		if [ ("$currentDate" - "$lastModifiedDate") -gt "$expirationToken" ]; then
+		lastModifiedDate=$(stat -c %Y "$FILE")
+		if [ $(("$currentDate" - "$lastModifiedDate")) -gt "$expirationToken" ]; then
 			read -p "Warning: $FILE uses a passphrase that exists more than 7 days. Would you like to change the passphrase? (y/n)" confirmation
 			if [ "{$confirmation,,}" == 'y' ]; then
 				read -p "Put the passphrase of the file" pass
