@@ -4,7 +4,7 @@
 
 #path to mainfolder
 usr=$(whoami)
-path=/home/"$usr"/*
+path=/home/"$usr"/*.gpg
 
 #one week 
 expirationToken=604800
@@ -15,13 +15,22 @@ currentDate=$(date +%s)
 
 #Checking passphrase expiration for each encrypted package 
 for FILE in "$path"; do
-	if [ -f "$FILE.gpg" ]; then
+	if [ -f "$FILE" ]; then
 		lastModifiedDate=$(stat -c %Y "$FILE")
+		if [ $? -ne 0 ]; then
+    			echo "Error: Could not retrieve modification time for $FILE."
+    			continue
+		fi
 		if [ $(("$currentDate" - "$lastModifiedDate")) -gt "$expirationToken" ]; then
 			read -p "Warning: $FILE uses a passphrase that exists more than 7 days. Would you like to change the passphrase? (y/n)" confirmation
-			if [ "{$confirmation,,}" == 'y' ]; then
-				read -p "Put the passphrase of the file" pass
-				sudo bash changePassphrase.sh "$FILE" "$pass"
+			if [ "${confirmation,,}" = 'y' ]; then
+				read -s -p "Put the passphrase of the file" pass
+				bash changePassphrase.sh "$FILE" "$pass"
+				if [ $? -ne 0 ]; then
+                        		echo "Error: Failed to change passphrase for $FILE."
+                    		else
+                        		echo "Passphrase successfully updated for $FILE."
+                    		fi
 			fi
 		fi
 	fi
